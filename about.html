@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Management Information System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in {
+      animation: fadeIn 0.6s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-200 text-gray-800 min-h-screen flex">
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-md flex items-center justify-between">
+      <h1 class="text-3xl font-bold">ℹ️ About MIS</h1>
+      <nav class="flex gap-4">
+      <a href="home.html" class="hover:text-indigo-600 font-medium">🏠 Home</a>
+      <a href="index.html" class="hover:text-indigo-600 font-medium">📋 Dashboard</a>
+      <a href="about.html" class="text-indigo-600 font-bold">ℹ️ About</a>
+    </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 fade-in space-y-8">
+
+      <!-- About Section -->
+      <div class="bg-white shadow-xl rounded-2xl p-6 max-w-2xl mx-auto text-center">
+        <h1 class="text-3xl font-bold text-indigo-700 mb-4">ℹ️ About This System</h1>
+        <p class="text-gray-700 leading-relaxed">
+          This <strong>Management Information System</strong> was built to help you manage student data quickly, easily, 
+          and efficiently. You can add, edit, delete, search, filter, and view data insights with interactive charts.
+          All data is stored locally, so it stays available even after you refresh the page.
+        </p>
+      </div>
+
+      <!-- Developer Section -->
+      <div class="bg-white shadow-xl rounded-2xl p-6 max-w-4xl mx-auto text-center">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-6">👨‍💻 Meet the Developers</h2>
+
+        <!-- Developer Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          
+          <!-- Jesie -->
+          <div class="bg-indigo-50 rounded-xl p-4 shadow hover:shadow-lg transition">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                 alt="Jesie Andrei Pungtod" 
+                 class="w-24 h-24 mx-auto rounded-full shadow-md mb-3">
+            <h3 class="text-lg font-semibold text-indigo-700">Jesie Andrei Pungtod</h3>
+            <p class="text-gray-600 text-sm mt-1">Lead Developer</p>
+          </div>
+
+          <!-- Liza -->
+          <div class="bg-indigo-50 rounded-xl p-4 shadow hover:shadow-lg transition">
+            <img src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" 
+                 alt="Liza Mae Alin" 
+                 class="w-24 h-24 mx-auto rounded-full shadow-md mb-3">
+            <h3 class="text-lg font-semibold text-indigo-700">Liza Mae Alin</h3>
+            <p class="text-gray-600 text-sm mt-1">Frontend Designer</p>
+          </div>
+
+          <!-- Rosemarie -->
+          <div class="bg-indigo-50 rounded-xl p-4 shadow hover:shadow-lg transition">
+            <img src="https://cdn-icons-png.flaticon.com/512/2922/2922656.png" 
+                 alt="Rosemarie Lubiano" 
+                 class="w-24 h-24 mx-auto rounded-full shadow-md mb-3">
+            <h3 class="text-lg font-semibold text-indigo-700">Rosemarie Lubiano</h3>
+            <p class="text-gray-600 text-sm mt-1">Database Manager</p>
+          </div>
+
+          <!-- Khent -->
+          <div class="bg-indigo-50 rounded-xl p-4 shadow hover:shadow-lg transition">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                 alt="Khent Vincent Ybale" 
+                 class="w-24 h-24 mx-auto rounded-full shadow-md mb-3">
+            <h3 class="text-lg font-semibold text-indigo-700">Khent Vincent Ybale</h3>
+            <p class="text-gray-600 text-sm mt-1">Backend Developer</p>
+          </div>
+
+          <!-- Audrey -->
+          <div class="bg-indigo-50 rounded-xl p-4 shadow hover:shadow-lg transition">
+            <img src="https://cdn-icons-png.flaticon.com/512/2922/2922688.png" 
+                 alt="Audrey Hannah Chiba" 
+                 class="w-24 h-24 mx-auto rounded-full shadow-md mb-3">
+            <h3 class="text-lg font-semibold text-indigo-700">Audrey Hannah Chiba</h3>
+            <p class="text-gray-600 text-sm mt-1">Quality Assurance</p>
+          </div>
+
+        </div>
+
+        <p class="mt-6 text-gray-600 text-sm">
+          We are passionate about creating simple, effective, and user-friendly web applications that make work easier.
+        </p>
+      </div>
+
+      <!-- Back Button -->
+      <div class="text-center">
+        <a href="index.html" class="bg-indigo-600 text-white px-6 py-2 rounded-lg shadow hover:bg-indigo-700 transition-all">
+          ← Back to Dashboard
+        </a>
+      </div>
+
+      <!-- Footer -->
+      <footer class="text-center text-gray-600 text-[11px] py-4">
+        &copy; <span id="year"></span> Management Information System. All rights reserved.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
