@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Management Information System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+    .sortable:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-200 text-gray-800 min-h-screen flex">
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-md flex items-center justify-between">
+      <h1 class="text-3xl font-bold">📚 Management Information System Dashboard</h1>
+      <button id="menuBtn" class="md:hidden text-white text-2xl">&#9776;</button>
+      <nav class="flex gap-4">
+        <a href="home.html" class="hover:underline font-medium">🏠 Home</a>
+        <a href="index.html" class="text-indigo-600 font-bold">📋 Dashboard</a>
+        <a href="about.html" class="hover:underline font-medium">ℹ️ About</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 flex-1">
+
+      <!-- Controls -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+        <input type="text" id="searchBar" placeholder="🔎 Search by name..." class="border p-2 rounded-lg shadow w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-indigo-400" onkeyup="searchStudent()">
+
+        <div class="flex gap-3">
+          <button onclick="displayStudents()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">Show All</button>
+          <button onclick="showHonorStudents()" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">Honor Students</button>
+          <select id="courseDropdown" onchange="filterByCourse()" class="border p-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option value="All">All Courses</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Add Student Form -->
+      <section class="mb-6 bg-white shadow-xl rounded-2xl p-4 w-full">
+        <h2 class="text-xl font-bold mb-3">➕ Add New Student</h2>
+        <form id="addStudentForm" class="flex flex-col md:flex-row gap-3 w-full">
+          <input type="text" id="studentName" placeholder="Name" required class="border p-2 rounded-lg flex-1">
+          <input type="text" id="studentCourse" placeholder="Course" required class="border p-2 rounded-lg flex-1">
+          <input type="number" id="studentGrade" placeholder="Grade" required class="border p-2 rounded-lg w-28">
+          <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">Add</button>
+        </form>
+      </section>
+
+      <!-- Student Table -->
+      <section class="overflow-x-auto bg-white shadow-xl rounded-2xl mb-6">
+        <table class="min-w-full border rounded-2xl">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="border px-4 py-2 sortable" onclick="sortTable('id')">ID ⬍</th>
+              <th class="border px-4 py-2 sortable" onclick="sortTable('name')">Name ⬍</th>
+              <th class="border px-4 py-2 sortable" onclick="sortTable('course')">Course ⬍</th>
+              <th class="border px-4 py-2 sortable" onclick="sortTable('grade')">Grade ⬍</th>
+              <th class="border px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTable"></tbody>
+        </table>
+      </section>
+
+      <!-- Graphs -->
+      <section class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white p-4 shadow-xl rounded-2xl">
+          <h2 class="text-lg font-bold mb-3 text-center">📊 Population per Course</h2>
+          <canvas id="populationChart"></canvas>
+        </div>
+        <div class="bg-white p-4 shadow-xl rounded-2xl">
+          <h2 class="text-lg font-bold mb-3 text-center">📈 Average Grade per Course</h2>
+          <canvas id="averageChart"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="editModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg w-96 text-center">
+      <h2 class="text-lg font-bold mb-4">✏️ Edit Student</h2>
+      <input type="text" id="editName" class="border p-2 rounded-lg w-full mb-3" placeholder="Name">
+      <input type="number" id="editGrade" class="border p-2 rounded-lg w-full mb-3" placeholder="Grade">
+      <input type="text" id="editCourse" class="border p-2 rounded-lg w-full mb-3" placeholder="Course">
+      <div class="flex justify-center gap-3">
+        <button onclick="saveEdit()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Save</button>
+        <button onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="notificationModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded-xl shadow-lg text-center w-80">
+      <p id="notificationText" class="mb-3 font-medium"></p>
+      <button onclick="closeNotification()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">OK</button>
+    </div>
+  </div>
+
+  <script>
+    let xmlDoc;
+    let editStudentId = null;
+    let sortState = { id: true, name: true, course: true, grade: true }; // added "id"
+
+    function loadXMLData() {
+      const storedData = localStorage.getItem("studentsXML");
+      if (storedData) {
+        const parser = new DOMParser();
+        xmlDoc = parser.parseFromString(storedData, "text/xml");
+      } else {
+        const xmlString = `
+          <students>
+            <student id="1"><name>John Doe</name><course>Computer Science</course><grade>90</grade></student>
+            <student id="2"><name>Jane Smith</name><course>Mathematics</course><grade>80</grade></student>
+            <student id="3"><name>Mark Johnson</name><course>Computer Science</course><grade>85</grade></student>
+            <student id="4"><name>Emily Davis</name><course>Physics</course><grade>70</grade></student>
+          </students>`;
+        const parser = new DOMParser();
+        xmlDoc = parser.parseFromString(xmlString, "text/xml");
+      }
+      displayStudents();
+      populateCourses();
+      updateCharts();
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("studentsXML", new XMLSerializer().serializeToString(xmlDoc));
+    }
+
+    function highlightText(text, query) {
+      if (!query) return text;
+      const regex = new RegExp(`(${query})`, "gi");
+      return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    function displayStudents(filterFn = null, searchQuery = "") {
+      const table = document.getElementById("studentsTable");
+      table.innerHTML = "";
+      const students = xmlDoc.getElementsByTagName("student");
+      let studentArray = Array.from(students);
+
+      if (filterFn) {
+        studentArray = studentArray.filter(s => filterFn({
+          name: s.getElementsByTagName("name")[0].textContent,
+          course: s.getElementsByTagName("course")[0].textContent,
+          grade: s.getElementsByTagName("grade")[0].textContent
+        }));
+      }
+
+      studentArray.forEach(student => {
+        const id = student.getAttribute("id");
+        const name = student.getElementsByTagName("name")[0].textContent;
+        const course = student.getElementsByTagName("course")[0].textContent;
+        const grade = student.getElementsByTagName("grade")[0].textContent;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border px-4 py-2">${id}</td>
+          <td class="border px-4 py-2">${highlightText(name, searchQuery)}</td>
+          <td class="border px-4 py-2">${course}</td>
+          <td class="border px-4 py-2">${grade}</td>
+          <td class="border px-4 py-2 text-center">
+            <button onclick="openModal(${id})" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
+            <button onclick="deleteStudent(${id})" class="bg-red-600 text-white px-2 py-1 rounded ml-2">Delete</button>
+          </td>
+        `;
+        table.appendChild(row);
+      });
+
+      updateCharts();
+    }
+
+    function sortTable(field) {
+      const students = Array.from(xmlDoc.getElementsByTagName("student"));
+      students.sort((a, b) => {
+        let valA, valB;
+        if (field === "id") {
+          valA = parseInt(a.getAttribute("id"));
+          valB = parseInt(b.getAttribute("id"));
+        } else {
+          valA = a.getElementsByTagName(field)[0].textContent;
+          valB = b.getElementsByTagName(field)[0].textContent;
+          if (field === "grade") {
+            valA = parseInt(valA);
+            valB = parseInt(valB);
+          }
+        }
+
+        if (valA < valB) return sortState[field] ? -1 : 1;
+        if (valA > valB) return sortState[field] ? 1 : -1;
+        return 0;
+      });
+
+      const parent = xmlDoc.getElementsByTagName("students")[0];
+      students.forEach(s => parent.appendChild(s));
+      sortState[field] = !sortState[field];
+
+      saveToLocalStorage();
+      displayStudents();
+    }
+
+    function populateCourses() {
+      const dropdown = document.getElementById("courseDropdown");
+      const courses = new Set(["All"]);
+      const students = xmlDoc.getElementsByTagName("student");
+
+      for (let i = 0; i < students.length; i++) {
+        courses.add(students[i].getElementsByTagName("course")[0].textContent);
+      }
+
+      dropdown.innerHTML = "";
+      courses.forEach(course => {
+        const option = document.createElement("option");
+        option.value = course;
+        option.textContent = course;
+        dropdown.appendChild(option);
+      });
+    }
+
+    function searchStudent() {
+      const query = document.getElementById("searchBar").value.toLowerCase();
+      displayStudents(s => s.name.toLowerCase().includes(query), query);
+    }
+
+    function showHonorStudents() {
+      displayStudents(s => parseInt(s.grade) >= 85);
+    }
+
+    function filterByCourse() {
+      const course = document.getElementById("courseDropdown").value;
+      if (course === "All") displayStudents();
+      else displayStudents(s => s.course === course);
+    }
+
+    document.getElementById("addStudentForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const name = document.getElementById("studentName").value;
+      const course = document.getElementById("studentCourse").value;
+      const grade = document.getElementById("studentGrade").value;
+
+      const students = xmlDoc.getElementsByTagName("students")[0];
+      const currentStudents = xmlDoc.getElementsByTagName("student");
+      let maxId = 0;
+      for (let i = 0; i < currentStudents.length; i++) {
+        const sid = parseInt(currentStudents[i].getAttribute("id"));
+        if (sid > maxId) maxId = sid;
+      }
+      const newId = maxId + 1;
+
+      const newStudent = xmlDoc.createElement("student");
+      newStudent.setAttribute("id", newId);
+
+      const nameEl = xmlDoc.createElement("name");
+      nameEl.textContent = name;
+      const courseEl = xmlDoc.createElement("course");
+      courseEl.textContent = course;
+      const gradeEl = xmlDoc.createElement("grade");
+      gradeEl.textContent = grade;
+
+      newStudent.appendChild(nameEl);
+      newStudent.appendChild(courseEl);
+      newStudent.appendChild(gradeEl);
+      students.appendChild(newStudent);
+
+      saveToLocalStorage();
+      displayStudents();
+      populateCourses();
+      e.target.reset();
+      showNotification("Student added successfully!");
+    });
+
+    function openModal(id) {
+      editStudentId = id;
+      const student = xmlDoc.querySelector(`student[id="${id}"]`);
+      document.getElementById("editName").value = student.getElementsByTagName("name")[0].textContent;
+      document.getElementById("editGrade").value = student.getElementsByTagName("grade")[0].textContent;
+      document.getElementById("editCourse").value = student.getElementsByTagName("course")[0].textContent;
+      document.getElementById("editModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("editModal").classList.add("hidden");
+    }
+
+    function saveEdit() {
+      const student = xmlDoc.querySelector(`student[id="${editStudentId}"]`);
+      student.getElementsByTagName("name")[0].textContent = document.getElementById("editName").value;
+      student.getElementsByTagName("grade")[0].textContent = document.getElementById("editGrade").value;
+      student.getElementsByTagName("course")[0].textContent = document.getElementById("editCourse").value;
+
+      saveToLocalStorage();
+      displayStudents();
+      populateCourses();
+      closeModal();
+      showNotification("Student updated successfully!");
+    }
+
+    function deleteStudent(id) {
+      const student = xmlDoc.querySelector(`student[id="${id}"]`);
+      if (student) {
+        student.parentNode.removeChild(student);
+        saveToLocalStorage();
+        displayStudents();
+        populateCourses();
+        showNotification("Student deleted successfully!");
+      }
+    }
+
+    function showNotification(message) {
+      document.getElementById("notificationText").textContent = message;
+      document.getElementById("notificationModal").classList.remove("hidden");
+    }
+
+    function closeNotification() {
+      document.getElementById("notificationModal").classList.add("hidden");
+    }
+
+    let populationChart, averageChart;
+    function updateCharts() {
+      const students = xmlDoc.getElementsByTagName("student");
+      const courseCounts = {};
+      const courseGrades = {};
+
+      for (let i = 0; i < students.length; i++) {
+        const course = students[i].getElementsByTagName("course")[0].textContent;
+        const grade = parseInt(students[i].getElementsByTagName("grade")[0].textContent);
+        courseCounts[course] = (courseCounts[course] || 0) + 1;
+        courseGrades[course] = courseGrades[course] || [];
+        courseGrades[course].push(grade);
+      }
+
+      const courses = Object.keys(courseCounts);
+      const counts = Object.values(courseCounts);
+      const averages = courses.map(c => {
+        const grades = courseGrades[c];
+        return grades.reduce((a, b) => a + b, 0) / grades.length;
+      });
+
+      if (populationChart) populationChart.destroy();
+      if (averageChart) averageChart.destroy();
+
+      populationChart = new Chart(document.getElementById("populationChart"), {
+        type: "bar",
+        data: {
+          labels: courses,
+          datasets: [{ label: "Population", data: counts, backgroundColor: "rgba(54, 162, 235, 0.6)" }]
+        }
+      });
+
+      averageChart = new Chart(document.getElementById("averageChart"), {
+        type: "bar",
+        data: {
+          labels: courses,
+          datasets: [{ label: "Average Grade", data: averages, backgroundColor: "rgba(255, 99, 132, 0.6)" }]
+        }
+      });
+    }
+
+    loadXMLData();
+  </script>
+</body>
+</html>
