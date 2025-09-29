@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | Management Information System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-200 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 shadow-md flex justify-between items-center">
+    <h1 class="text-3xl font-bold">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" class="w-8 h-8" alt="Logo">
+      Management Information System
+    </h1>
+    <nav class="flex gap-4">
+      <a href="home.html" class="text-indigo-600 font-bold">🏠 Home</a>
+      <a href="index.html" class="hover:underline font-medium">📋 Dashboard</a>
+      <a href="about.html" class="hover:underline font-medium">ℹ️ About</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex flex-col items-center justify-center flex-1 text-center p-6">
+    <!-- Hero Section -->
+    <div class="max-w-3xl">
+      <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Welcome Illustration" class="mx-auto w-40 md:w-56 mb-6 animate-bounce">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-indigo-700 mb-4">Welcome to MIS!</h2>
+      <p class="max-w-xl mx-auto text-gray-700 text-lg mb-6">
+        A modern, user-friendly Management Information System that lets you manage students, monitor performance, and visualize data — all in one place.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-4 justify-center">
+        <a href="index.html" class="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition">
+          🚀 Go to Dashboard
+        </a>
+        <a href="#about" class="bg-white text-indigo-600 px-6 py-3 rounded-lg shadow hover:bg-indigo-100 transition">
+          ℹ️ Learn More
+        </a>
+      </div>
+    </div>
+
+    <!-- Decorative Icons Row -->
+    <div class="flex justify-center gap-6 mt-10">
+      <img src="https://cdn-icons-png.flaticon.com/512/2995/2995620.png" alt="Icon 1" class="w-16 h-16 hover:scale-110 transition">
+      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910768.png" alt="Icon 2" class="w-16 h-16 hover:scale-110 transition">
+      <img src="https://cdn-icons-png.flaticon.com/512/2857/2857395.png" alt="Icon 3" class="w-16 h-16 hover:scale-110 transition">
+    </div>
+  </main>
+
+  <!-- About Section -->
+  <section id="about" class="bg-white shadow-inner rounded-t-2xl p-8 text-center">
+    <h3 class="text-3xl font-bold text-indigo-700 mb-3">About This System</h3>
+    <p class="text-gray-700 max-w-2xl mx-auto mb-6">
+      The Management Information System (MIS) allows you to efficiently manage student records. 
+      You can add, edit, delete, and search students, filter by course, and generate visual reports with charts. 
+      Your data is stored locally, so it stays even after refreshing or reopening the page.
+    </p>
+    <img src="https://cdn-icons-png.flaticon.com/512/870/870169.png" alt="Analytics Illustration" class="mx-auto w-32 mt-4">
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center text-gray-600 py-3">
+    &copy; <span id="year"></span> Management Information System. All rights reserved.
+  </footer>
+
+  <script>
+    // Dynamically update year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
